@@ -108,7 +108,8 @@ endif
 " variants: mirage, dark, dark
 "let ayucolor="mirage" colorscheme ayu turn off search highlight
 nnoremap ,<space> :nohlsearch<CR>
-
+" nvim-tree
+nnoremap <space>e :NvimTreeToggle<CR>
 lua << EOF
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -205,8 +206,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
--- nvim-tree
-  buf_set_keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
+
   require "lsp_signature".on_attach({
       bind = true, -- This is mandatory, otherwise border config won't get registered.
       floating_window = true,
@@ -353,7 +353,6 @@ require("nvim-tree").setup {
         height = 30,
         hide_root_folder = false,
         side = "left",
-        auto_resize = true,
         mappings = {
             custom_only = false,
             list = {
@@ -366,8 +365,11 @@ require("nvim-tree").setup {
         relativenumber = false,
     },
     actions = {
+        open_file = {
+        resize_window = true,
         quit_on_open = true,
         window_picker = { enable = true },
+        },
     },
     renderer = {
         highlight_git = true,
@@ -586,8 +588,6 @@ require('telescope').setup {
 require('telescope').load_extension('fzf')
 EOF
 
-" Fast component creating for React app
-command CreateComponent :terminal '/usr/igokk/code/lms/frontend/createcomponent.py'
 
 " White colors for LSP messages in code
 set termguicolors
