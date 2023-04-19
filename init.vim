@@ -46,6 +46,9 @@ Plug 'xiyaowong/nvim-transparent'
 Plug 'Pocco81/auto-save.nvim'
 Plug 'justinmk/vim-sneak'
 
+" transparency
+Plug 'tribela/vim-transparent'
+
 " JS/JSX/TS
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
@@ -104,6 +107,13 @@ let g:material_theme_style = 'darker'
 if (has('termguicolors'))
   set termguicolors
 endif
+
+
+" transparency
+let g:transparent_groups = ['Normal', 'Comment', 'Constant', 'Special', 'Identifier',
+                            \ 'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String',
+                            \ 'Function', 'Conditional', 'Repeat', 'Operator', 'Structure',
+                            \ 'LineNr', 'NonText', 'SignColumn', 'CursorLineNr', 'EndOfBuffer']
 
 " variants: mirage, dark, dark
 "let ayucolor="mirage" colorscheme ayu turn off search highlight
