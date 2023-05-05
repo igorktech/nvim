@@ -40,6 +40,8 @@ Plug 'morhetz/gruvbox'  " colorscheme gruvbox
 Plug 'mhartington/oceanic-next'  " colorscheme OceanicNext
 Plug 'kaicataldo/material.vim', { 'branch': 'main' }
 Plug 'ayu-theme/ayu-vim'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
+Plug 'nonetallt/vim-neon-dark', { 'tag': '2.1.0' }
 
 Plug 'xiyaowong/nvim-transparent'
 
@@ -80,6 +82,8 @@ Plug 'ray-x/lsp_signature.nvim'
 
 call plug#end()
 
+"set guifont=BitstreamVeraSansMono_NF:h13
+
 " Leader bind to space
 let mapleader = ","
 
@@ -98,8 +102,8 @@ let g:prettier#quickfix_enabled = 0
 " Turn on vim-sneak
 let g:sneak#label = 1
 
-"colorscheme gruvbox
-colorscheme OceanicNext
+colorscheme gruvbox
+"colorscheme OceanicNext
 let g:material_terminal_italics = 1
 " variants: default, palenight, ocean, lighter, darker, default-community, palenight-community, ocean-community, lighter-community, darker-community
 let g:material_theme_style = 'darker'
@@ -108,6 +112,11 @@ if (has('termguicolors'))
   set termguicolors
 endif
 
+"colorscheme catpuccin
+"colorscheme catppuccin "catppuccin  catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
+
+"colorscheme neon-dark
+"colorscheme neon-dark
 
 " transparency
 let g:transparent_groups = ['Normal', 'Comment', 'Constant', 'Special', 'Identifier',
@@ -118,8 +127,6 @@ let g:transparent_groups = ['Normal', 'Comment', 'Constant', 'Special', 'Identif
 " variants: mirage, dark, dark
 "let ayucolor="mirage" colorscheme ayu turn off search highlight
 nnoremap ,<space> :nohlsearch<CR>
-" nvim-tree
-nnoremap <space>e :NvimTreeToggle<CR>
 lua << EOF
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -244,7 +251,7 @@ nvim_lsp.tsserver.setup({
         buf_map(bufnr, "n", "gs", ":TSLspOrganize<CR>")
         buf_map(bufnr, "n", "gi", ":TSLspRenameFile<CR>")
         buf_map(bufnr, "n", "go", ":TSLspImportAll<CR>")
-        on_attach(client, bufnr)
+        on_attach(client, Bufnr)
     end,
 })
 
@@ -271,7 +278,7 @@ require'lspconfig'.stylelint_lsp.setup{
 -- nvim-treesitter
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  ensure_installed = {"c","python","cpp","lua","vim","vimdoc"},
+  ensure_installed = {"c","python","cpp","ruby","rust","lua","go","latex","json","regex","vim","vimdoc"},
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
@@ -415,6 +422,7 @@ require("nvim-tree").setup {
     }
 }
 
+vim.api.nvim_set_keymap("n", "<Space>t", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 
 -- toggleterminal
 
@@ -457,7 +465,7 @@ vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
 
-local servers = { 'pyright','ccls','rust_analyzer' }
+local servers = { 'pyright','ccls','rust_analyzer','solargraph','gopls' }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
