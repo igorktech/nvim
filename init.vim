@@ -554,7 +554,9 @@ autocmd FileType c imap <buffer> <C-h> <esc>:w<CR>:exec '!gcc' shellescape(@%, 1
 autocmd FileType sh map <buffer> <C-h> :w<CR>:exec '!bash' shellescape(@%, 1)<CR>
 autocmd FileType sh imap <buffer> <C-h> <esc>:w<CR>:exec '!bash' shellescape(@%, 1)<CR>
 
-autocmd FileType python set colorcolumn=79
+" For all files
+autocmd BufEnter * set colorcolumn=79
+" autocmd FileType python set colorcolumn=79
 
 set relativenumber
 set rnu
