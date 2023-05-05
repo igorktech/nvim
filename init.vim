@@ -67,18 +67,17 @@ Plug 'prettier/vim-prettier', {
 
 Plug 'bmatcuk/stylelint-lsp'
 
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
-
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
-"Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " Convenient floating terminal window
 "Plug 'voldikss/vim-floaterm'
 
 Plug 'ray-x/lsp_signature.nvim'
+
 
 call plug#end()
 
@@ -278,7 +277,7 @@ require'lspconfig'.stylelint_lsp.setup{
 -- nvim-treesitter
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  ensure_installed = {"c","python","cpp","ruby","rust","lua","go","latex","json","regex","vim","vimdoc"},
+
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
@@ -333,12 +332,12 @@ local tree_cb = nvim_tree_config.nvim_tree_callback
 require("nvim-tree").setup {
     disable_netrw = true,
     hijack_netrw = true,
-    open_on_setup = false,
-    ignore_ft_on_setup = {
-        "startify",
-        "dashboard",
-        "alpha",
-    },
+    --open_on_setup = false,
+   -- ignore_ft_on_setup = {
+   --     "startify",
+   --     "dashboard",
+   --     "alpha",
+   -- },
     open_on_tab = false,
     hijack_cursor = false,
     update_cwd = true,
@@ -367,7 +366,6 @@ require("nvim-tree").setup {
     },
     view = {
         width = 30,
-        height = 30,
         hide_root_folder = false,
         side = "left",
         mappings = {
@@ -466,6 +464,7 @@ vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
 -- map buffer local keybindings when the language server attaches
 
 local servers = { 'pyright','ccls','rust_analyzer','solargraph','gopls' }
+
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
@@ -564,7 +563,9 @@ autocmd FileType c imap <buffer> <C-h> <esc>:w<CR>:exec '!gcc' shellescape(@%, 1
 autocmd FileType sh map <buffer> <C-h> :w<CR>:exec '!bash' shellescape(@%, 1)<CR>
 autocmd FileType sh imap <buffer> <C-h> <esc>:w<CR>:exec '!bash' shellescape(@%, 1)<CR>
 
-autocmd FileType python set colorcolumn=79
+" For all files
+autocmd BufEnter * set colorcolumn=79
+" autocmd FileType python set colorcolumn=79
 
 set relativenumber
 set rnu
