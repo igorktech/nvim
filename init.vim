@@ -30,10 +30,8 @@ Plug 'L3MON4D3/LuaSnip'
 
 " project tree
 Plug 'nvim-tree/nvim-web-devicons' " optional
-Plug 'nvim-tree/nvim-tree.lua'
+Plug 'prichrd/netrw.nvim'
 
-" toggleterm
-Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 
 " color schemas
 Plug 'morhetz/gruvbox'  " colorscheme gruvbox
@@ -67,9 +65,6 @@ Plug 'prettier/vim-prettier', {
 
 Plug 'bmatcuk/stylelint-lsp'
 
-"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 
@@ -81,7 +76,10 @@ Plug 'ray-x/lsp_signature.nvim'
 
 call plug#end()
 
-"set guifont=BitstreamVeraSansMono_NF:h13
+" loading the nvim-web-devicons plugin
+let g:webdevicons_enable = 1
+
+"set guifont BitstreamVeraSansMono_NF:h13
 
 " Leader bind to space
 let mapleader = ","
@@ -126,6 +124,10 @@ let g:transparent_groups = ['Normal', 'Comment', 'Constant', 'Special', 'Identif
 " variants: mirage, dark, dark
 "let ayucolor="mirage" colorscheme ayu turn off search highlight
 nnoremap ,<space> :nohlsearch<CR>
+
+"map explorer
+nnoremap <Leader>e :Explore<CR>
+
 lua << EOF
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -318,147 +320,61 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 
--- nvim-tree
+-- nvim-web-devicons
 
--- disable netrw at the very start of your init.lua (strongly advised)
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
--- set termguicolors to enable highlight groups
-vim.opt.termguicolors = true
-
-local nvim_tree_config = require("nvim-tree.config")
-local tree_cb = nvim_tree_config.nvim_tree_callback
--- setup with some options
-require("nvim-tree").setup {
-    disable_netrw = true,
-    hijack_netrw = true,
-    --open_on_setup = false,
-   -- ignore_ft_on_setup = {
-   --     "startify",
-   --     "dashboard",
-   --     "alpha",
-   -- },
-    open_on_tab = false,
-    hijack_cursor = false,
-    update_cwd = true,
-    hijack_directories = {
-        enable = true,
-        auto_open = true,
-    },
-    diagnostics = {
-        enable = true,
-        icons = {
-            hint = "",
-            info = "",
-            warning = "",
-            error = "",
-        },
-    },
-    update_focused_file = {
-        enable = true,
-        update_cwd = true,
-        ignore_list = {},
-    },
-    git = {
-        enable = true,
-        ignore = true,
-        timeout = 500,
-    },
-    view = {
-        width = 30,
-        hide_root_folder = false,
-        side = "left",
-        mappings = {
-            custom_only = false,
-            list = {
-            { key = { "l", "<CR>", "o" }, cb = tree_cb "edit" },
-            { key = "h", cb = tree_cb "close_node" },
-            { key = "v", cb = tree_cb "vsplit" },
-            },
-        },
-        number = false,
-        relativenumber = false,
-    },
-    actions = {
-        open_file = {
-        resize_window = true,
-        quit_on_open = true,
-        window_picker = { enable = true },
-        },
-    },
-    renderer = {
-        highlight_git = true,
-        root_folder_modifier = ":t",
-        icons = {
-            show = {
-                file = true,
-                folder = true,
-                folder_arrow = true,
-                git = true,
-            },
-            glyphs = {
-                default = "",
-                symlink = "",
-                git = {
-                    unstaged = "",
-                    staged = "S",
-                    unmerged = "",
-                    renamed = "➜",
-                    deleted = "",
-                    untracked = "U",
-                    ignored = "◌",
-                },
-                folder = {
-                    default = "",
-                    open = "",
-                    empty = "",
-                    empty_open = "",
-                    symlink = "",
-                },
-            }
-        }
-    }
+require'nvim-web-devicons'.setup {
+  override = {
+  zsh = {
+    icon = "",
+    color = "#428850",
+    cterm_color = "65",
+    name = "Zsh"
+  }
+ };
+ -- globally enable different highlight colors per icon (default to true)
+ -- if set to false all icons will have the default icon's color
+ color_icons = true;
+ -- globally enable default icons (default to false)
+ -- will get overriden by `get_icons` option
+ default = true;
+ -- globally enable "strict" selection of icons - icon will be looked up in
+ -- different tables, first by filename, and if not found by extension; this
+ -- prevents cases when file doesn't have any extension but still gets some icon
+ -- because its name happened to match some extension (default to false)
+ strict = true;
+ -- same as `override` but specifically for overrides by filename
+ -- takes effect when `strict` is true
+ override_by_filename = {
+  [".gitignore"] = {
+    icon = "",
+    color = "#f1502f",
+    name = "Gitignore"
+  }
+ };
+ -- same as `override` but specifically for overrides by extension
+ -- takes effect when `strict` is true
+ override_by_extension = {
+  ["log"] = {
+    icon = "",
+    color = "#81e043",
+    name = "Log"
+  }
+ };
 }
 
-vim.api.nvim_set_keymap("n", "<Space>t", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
+-- netrw
 
--- toggleterminal
-
-require("toggleterm").setup({
-	size = 20,
-	open_mapping = [[<c-\>]],
-	hide_numbers = true,
-	shade_filetypes = {},
-	shade_terminals = true,
-	shading_factor = 2,
-	start_in_insert = true,
-	insert_mappings = true,
-	persist_size = true,
-	direction = "float",
-	close_on_exit = true,
-	shell = vim.o.shell,
-	float_opts = {
-		border = "curved",
-		winblend = 0,
-		highlights = {
-			border = "Normal",
-			background = "Normal",
-		},
-	},
-})
-
-function _G.set_terminal_keymaps()
-  local opts = {noremap = true}
-  vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', 'jk', [[<C-\><C-n>]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
-  vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
-end
-
-vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+require'netrw'.setup{
+  -- Put your configuration here, or leave the object empty to take the default
+  -- configuration.
+  icons = {
+    symlink = '', -- Symlink icon (directory and file)
+    directory = '', -- Directory icon
+    file = '', -- File icon
+  },
+  use_devicons = true, -- Uses nvim-web-devicons if true, otherwise use the file icon specified above
+  mappings = {}, -- Custom key mappings
+}
 
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
