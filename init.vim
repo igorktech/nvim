@@ -28,10 +28,6 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'L3MON4D3/LuaSnip'
 
-" project tree
-Plug 'nvim-tree/nvim-web-devicons' " optional
-Plug 'prichrd/netrw.nvim'
-
 
 " color schemas
 Plug 'morhetz/gruvbox'  " colorscheme gruvbox
@@ -49,14 +45,6 @@ Plug 'justinmk/vim-sneak'
 " transparency
 Plug 'tribela/vim-transparent'
 
-" JS/JSX/TS
-Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
-Plug 'maxmellon/vim-jsx-pretty'
-" TS from here https://jose-elias-alvarez.medium.com/configuring-neovims-lsp-client-for-typescript-development-5789d58ea9c
-Plug 'jose-elias-alvarez/null-ls.nvim'
-Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 Plug 'nvim-lua/plenary.nvim'
 
 Plug 'prettier/vim-prettier', {
@@ -75,9 +63,6 @@ Plug 'ray-x/lsp_signature.nvim'
 
 
 call plug#end()
-
-" loading the nvim-web-devicons plugin
-let g:webdevicons_enable = 1
 
 "set guifont BitstreamVeraSansMono_NF:h13
 
@@ -158,22 +143,22 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
---    ['<Tab>'] = function(fallback)
-  --    if cmp.visible() then
-    --    cmp.select_next_item()
-    --  elseif luasnip.expand_or_jumpable() then
-      --  vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true), '')
-     -- else
-     --   fallback()
-     -- end
-   -- end,
     ['<Tab>'] = function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
+      if vim.fn.pumvisible() == 1 then
+        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
+      elseif luasnip.expand_or_jumpable() then
+        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true), '')
       else
         fallback()
       end
     end,
+   -- ['<Tab>'] = function(fallback)
+   --   if cmp.visible() then
+   --     cmp.select_next_item()
+   --   else
+   --     fallback()
+   --   end
+   -- end,
 
     ['<S-Tab>'] = function(fallback)
       if cmp.visible() then
@@ -235,36 +220,6 @@ local on_attach = function(client, bufnr)
     }, bufnr)  -- Note: add in lsp client on-attach
 end
 
--- TS setup
-local buf_map = function(bufnr, mode, lhs, rhs, opts)
-    vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts or {
-        silent = true,
-    })
-end
-
-nvim_lsp.tsserver.setup({
-    on_attach = function(client, bufnr)
-        client.server_capabilities.document_formatting = false
-        client.server_capabilities.document_range_formatting = false
-        local ts_utils = require("nvim-lsp-ts-utils")
-        ts_utils.setup({})
-        ts_utils.setup_client(client)
-        buf_map(bufnr, "n", "gs", ":TSLspOrganize<CR>")
-        buf_map(bufnr, "n", "gi", ":TSLspRenameFile<CR>")
-        buf_map(bufnr, "n", "go", ":TSLspImportAll<CR>")
-        on_attach(client, Bufnr)
-    end,
-})
-
-local null_ls = require("null-ls")
-null_ls.setup({
-    sources = {
-        null_ls.builtins.diagnostics.eslint,
-        null_ls.builtins.code_actions.eslint,
-        null_ls.builtins.formatting.prettier
-    },
-    on_attach = on_attach
-})
 
 -- Stylelint format after save
 require'lspconfig'.stylelint_lsp.setup{
@@ -318,62 +273,6 @@ require'nvim-treesitter.configs'.setup {
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = true,
   },
-}
-
--- nvim-web-devicons
-
-require'nvim-web-devicons'.setup {
-  override = {
-  zsh = {
-    icon = "",
-    color = "#428850",
-    cterm_color = "65",
-    name = "Zsh"
-  }
- };
- -- globally enable different highlight colors per icon (default to true)
- -- if set to false all icons will have the default icon's color
- color_icons = true;
- -- globally enable default icons (default to false)
- -- will get overriden by `get_icons` option
- default = true;
- -- globally enable "strict" selection of icons - icon will be looked up in
- -- different tables, first by filename, and if not found by extension; this
- -- prevents cases when file doesn't have any extension but still gets some icon
- -- because its name happened to match some extension (default to false)
- strict = true;
- -- same as `override` but specifically for overrides by filename
- -- takes effect when `strict` is true
- override_by_filename = {
-  [".gitignore"] = {
-    icon = "",
-    color = "#f1502f",
-    name = "Gitignore"
-  }
- };
- -- same as `override` but specifically for overrides by extension
- -- takes effect when `strict` is true
- override_by_extension = {
-  ["log"] = {
-    icon = "",
-    color = "#81e043",
-    name = "Log"
-  }
- };
-}
-
--- netrw
-
-require'netrw'.setup{
-  -- Put your configuration here, or leave the object empty to take the default
-  -- configuration.
-  icons = {
-    symlink = '', -- Symlink icon (directory and file)
-    directory = '', -- Directory icon
-    file = '', -- File icon
-  },
-  use_devicons = true, -- Uses nvim-web-devicons if true, otherwise use the file icon specified above
-  mappings = {}, -- Custom key mappings
 }
 
 
