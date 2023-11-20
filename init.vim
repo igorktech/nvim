@@ -45,6 +45,9 @@ Plug 'justinmk/vim-sneak'
 " transparency
 Plug 'tribela/vim-transparent'
 
+" comment
+Plug 'tpope/vim-commentary'
+
 Plug 'nvim-lua/plenary.nvim'
 
 Plug 'prettier/vim-prettier', {
@@ -142,7 +145,7 @@ cmp.setup {
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
-    },
+    }
     ['<Tab>'] = function(fallback)
       if vim.fn.pumvisible() == 1 then
         vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
