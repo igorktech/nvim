@@ -14,9 +14,6 @@ filetype indent on      " load filetype-specific indent files
 
 " for tabulation
 set smartindent
-set tabstop=2
-set expandtab
-set shiftwidth=2
 
 inoremap jk <esc>
 
@@ -88,20 +85,11 @@ let g:prettier#quickfix_enabled = 0
 let g:sneak#label = 1
 
 colorscheme gruvbox
-"colorscheme OceanicNext
-let g:material_terminal_italics = 1
-" variants: default, palenight, ocean, lighter, darker, default-community, palenight-community, ocean-community, lighter-community, darker-community
-let g:material_theme_style = 'darker'
-"colorscheme material
+" colorscheme OceanicNext
 if (has('termguicolors'))
   set termguicolors
 endif
 
-"colorscheme catpuccin
-"colorscheme catppuccin "catppuccin  catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
-
-"colorscheme neon-dark
-"colorscheme neon-dark
 
 " transparency
 let g:transparent_groups = ['Normal', 'Comment', 'Constant', 'Special', 'Identifier',
@@ -145,7 +133,7 @@ cmp.setup {
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
-    }
+    },
     ['<Tab>'] = function(fallback)
       if vim.fn.pumvisible() == 1 then
         vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
