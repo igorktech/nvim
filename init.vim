@@ -78,19 +78,14 @@ let g:prettier#quickfix_enabled = 0
 " Turn on vim-sneak
 let g:sneak#label = 1
 
-colorscheme xcodedark
-" colorscheme gruvbox
-" colorscheme OceanicNext
-if (has('termguicolors'))
-  set termguicolors
-endif
-
 
 " transparency
 let g:transparent_groups = ['Normal', 'Comment', 'Constant', 'Special', 'Identifier',
                             \ 'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String',
                             \ 'Function', 'Conditional', 'Repeat', 'Operator', 'Structure',
                             \ 'LineNr', 'NonText', 'SignColumn', 'CursorLineNr', 'EndOfBuffer']
+
+
 
 " variants: mirage, dark, dark
 "let ayucolor="mirage" colorscheme ayu turn off search highlight
@@ -267,7 +262,6 @@ for _, lsp in ipairs(servers) do
 end
 EOF
 
-
 " Delete buffer while keeping window layout (don't close buffer's windows).
 " Version 2008-11-18 from http://vim.wikia.com/wiki/VimTip165
 if v:version < 700 || exists('loaded_bclose') || &cp
@@ -364,6 +358,7 @@ set rnu
 
 let g:transparent_enabled = v:true
 
+
 tnoremap <Esc> <C-\><C-n>
 
 " Telescope bindings
@@ -406,3 +401,13 @@ hi DiagnosticError guifg=White
 hi DiagnosticWarn  guifg=White
 hi DiagnosticInfo  guifg=White
 hi DiagnosticHint  guifg=White
+
+" Setup colorschemes
+
+" colorscheme gruvbox
+" colorscheme OceanicNext
+colorscheme xcode
+if (has('termguicolors'))
+    set termguicolors
+endif
+
