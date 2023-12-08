@@ -25,22 +25,16 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'L3MON4D3/LuaSnip'
 
-
 " color schemas
+Plug 'arzg/vim-colors-xcode'
 Plug 'morhetz/gruvbox'  " colorscheme gruvbox
 Plug 'mhartington/oceanic-next'  " colorscheme OceanicNext
-Plug 'kaicataldo/material.vim', { 'branch': 'main' }
-Plug 'ayu-theme/ayu-vim'
-Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
-Plug 'nonetallt/vim-neon-dark', { 'tag': '2.1.0' }
 
+" transparency
 Plug 'xiyaowong/nvim-transparent'
 
 Plug 'Pocco81/auto-save.nvim'
 Plug 'justinmk/vim-sneak'
-
-" transparency
-Plug 'tribela/vim-transparent'
 
 " comment
 Plug 'tpope/vim-commentary'
@@ -84,7 +78,8 @@ let g:prettier#quickfix_enabled = 0
 " Turn on vim-sneak
 let g:sneak#label = 1
 
-colorscheme gruvbox
+colorscheme xcodedark
+" colorscheme gruvbox
 " colorscheme OceanicNext
 if (has('termguicolors'))
   set termguicolors
@@ -135,22 +130,12 @@ cmp.setup {
       select = true,
     },
     ['<Tab>'] = function(fallback)
-      if vim.fn.pumvisible() == 1 then
-        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
-      elseif luasnip.expand_or_jumpable() then
-        vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>luasnip-expand-or-jump', true, true, true), '')
+      if cmp.visible() then
+        cmp.select_next_item()
       else
         fallback()
       end
     end,
-   -- ['<Tab>'] = function(fallback)
-   --   if cmp.visible() then
-   --     cmp.select_next_item()
-   --   else
-   --     fallback()
-   --   end
-   -- end,
-
     ['<S-Tab>'] = function(fallback)
       if cmp.visible() then
         cmp.select_prev_item() 
