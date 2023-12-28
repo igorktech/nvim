@@ -42,13 +42,13 @@ Plug 'tpope/vim-commentary'
 Plug 'nvim-lua/plenary.nvim'
 
 Plug 'prettier/vim-prettier', {
-  \ 'do': 'npm install --frozen-lockfile --production',
+  \ 'do': 'yarn install --frozen-lockfile --production',
   \ 'for': ['javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 
 Plug 'bmatcuk/stylelint-lsp'
 
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " Convenient floating terminal window
 "Plug 'voldikss/vim-floaterm'
@@ -380,17 +380,6 @@ EOF
 
 " Telescope fzf plugin
 lua << EOF
-
-require('telescope').setup {
-	extentions = {
-		fzf = {
-			fuzzy = true,
-			override_generic_sorter = true,
-			override_file_sorter = true,
-			case_mode ="smart_case",
-			}
-		}
-	}
 require('telescope').load_extension('fzf')
 EOF
 
