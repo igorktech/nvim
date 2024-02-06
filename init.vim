@@ -1,67 +1,104 @@
-set mouse=a  " enable mouse
+" Common settings
+let mapleader = ","                   " set leader key to comma
+" let g:maplocalleader = "-"            " set file local leader key to dash
+set nocompatible                     " not compatible with vi
+set number                           " line number
+set numberwidth=1                    " line numbers gutter autowidth
+set cursorline                       " highlight current line
+set noshowmatch                      " don't jump to pair bracket
+set autoread                         " reload files when changes happen outside Vim
+set autowrite                        " auto write buffer on certain events
+set hidden                           " keep changes in buffer when quitting window
+set noswapfile                       " disable swap files
+set scrolloff=2                      " line padding when scrolling
+set textwidth=0                      " when line wrap occurs
+set wrapmargin=0                     " disable auto line wrapping
+set clipboard=unnamedplus            " use system clipboard
+let g:c_syntax_for_h = 1             " .h file use C filetype instead of C++
+set encoding=utf-8                   " utf-8 encoding
+set shellredir='>'                   " don't include stderr when reading a command
+
+" Intuitive split opening
+set splitbelow                        " split below
+set splitright                        " split right
+set equalalways                       " equalize window sizes
+
+" Tab settings
+set tabstop=4                        " tab size
+set softtabstop=4
+set shiftwidth=4
+set expandtab                         " tab to space
+set autoindent
+set smartindent
+
+" File search
+set ignorecase                        " case insensitive
+set smartcase
+set hlsearch                          " match highlight
+set incsearch
+
+" Status
+set laststatus=2                     " always a statusline (all windows)
+set showcmd                          " show current partial command in the bottom right
+set noshowmode                       " don't show current mode (i.e., --INSERT--)
+
+set ch=0                              " make command line invisible when not typing command
+
+set mouse=a                           " enable mouse
 set encoding=utf-8
-set number
 set noswapfile
 set scrolloff=7
 
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set expandtab
-set autoindent
 set fileformat=unix
-filetype indent on      " load filetype-specific indent files
+filetype indent on                    " load filetype-specific indent files
 
-" for tabulation
-set smartindent
+inoremap jk <esc>                     " Leader bind to space
 
-inoremap jk <esc>
 
 call plug#begin('~/.vim/plugged')
-Plug 'nvim-treesitter/nvim-treesitter'
-Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'saadparwaiz1/cmp_luasnip'
-Plug 'L3MON4D3/LuaSnip'
-
-" color schemas
-Plug 'arzg/vim-colors-xcode'
-Plug 'morhetz/gruvbox'  " colorscheme gruvbox
-Plug 'mhartington/oceanic-next'  " colorscheme OceanicNext
-
-" transparency
-Plug 'xiyaowong/nvim-transparent'
-
-Plug 'Pocco81/auto-save.nvim'
-Plug 'justinmk/vim-sneak'
-
-" comment
-Plug 'tpope/vim-commentary'
-
-Plug 'nvim-lua/plenary.nvim'
-
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install --frozen-lockfile --production',
-  \ 'for': ['javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
-
-Plug 'bmatcuk/stylelint-lsp'
-
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-
-" Convenient floating terminal window
-"Plug 'voldikss/vim-floaterm'
-
-Plug 'ray-x/lsp_signature.nvim'
-
-
+    " Lang
+    Plug 'ziglang/zig.vim'
+    " lsp
+    Plug 'nvim-treesitter/nvim-treesitter'
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'hrsh7th/nvim-cmp'
+    Plug 'hrsh7th/cmp-nvim-lsp'
+    Plug 'saadparwaiz1/cmp_luasnip'
+    Plug 'L3MON4D3/LuaSnip'
+    
+    " color schemas
+    Plug 'arzg/vim-colors-xcode'
+    Plug 'morhetz/gruvbox'  " colorscheme gruvbox
+    Plug 'mhartington/oceanic-next'  " colorscheme OceanicNext
+    
+    " transparency
+    Plug 'xiyaowong/nvim-transparent'
+    
+    Plug 'Pocco81/auto-save.nvim'
+    Plug 'justinmk/vim-sneak'
+    
+    " comment
+    Plug 'tpope/vim-commentary'
+    
+    Plug 'nvim-lua/plenary.nvim'
+    
+    Plug 'prettier/vim-prettier', {
+      \ 'do': 'yarn install --frozen-lockfile --production',
+      \ 'for': ['javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
+    
+    Plug 'bmatcuk/stylelint-lsp'
+    
+    Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
+    Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+    
+    " Convenient floating terminal window
+    "Plug 'voldikss/vim-floaterm'
+    
+    Plug 'ray-x/lsp_signature.nvim'
 call plug#end()
 
 "set guifont BitstreamVeraSansMono_NF:h13
 
-" Leader bind to space
-let mapleader = ","
 
 " Netrw file explorer settings
 let g:netrw_banner = 0 " hide banner above files
@@ -84,8 +121,6 @@ let g:transparent_groups = ['Normal', 'Comment', 'Constant', 'Special', 'Identif
                             \ 'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String',
                             \ 'Function', 'Conditional', 'Repeat', 'Operator', 'Structure',
                             \ 'LineNr', 'NonText', 'SignColumn', 'CursorLineNr', 'EndOfBuffer']
-
-
 
 " variants: mirage, dark, dark
 "let ayucolor="mirage" colorscheme ayu turn off search highlight
@@ -206,7 +241,8 @@ require'lspconfig'.stylelint_lsp.setup{
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
 
-  ensure_installed = {"c","cpp","css","python","go","html","javascript","json","dockerfile","latex","lua","markdown","matlab","ruby","rust","typescript","vim","vimdoc"},
+  ensure_installed = {"c","cpp","css","python","go","html","javascript","json",
+  "dockerfile","latex","lua","markdown","matlab","ruby","rust","typescript","vim","vimdoc", "zig"},
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
@@ -250,16 +286,28 @@ require'nvim-treesitter.configs'.setup {
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
 
-local servers = { 'pyright','ccls','rust_analyzer','solargraph','gopls' }
+local servers = { 'pyright','clangd','rust_analyzer','solargraph','gopls','zls' }
 
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    on_attach = on_attach,
-    flags = {
-      debounce_text_changes = 150,
+  if lsp == "clangd" then
+    nvim_lsp[lsp].setup {
+      on_attach = on_attach,
+      flags = {
+        debounce_text_changes = 150,
+      },
+      cmd = { "clangd", "--background-index" }, 
+      filetypes = { "c", "cpp" }, -- Specify the filetypes for which clangd should be activated
     }
-  }
+  else
+    nvim_lsp[lsp].setup {
+      on_attach = on_attach,
+      flags = {
+        debounce_text_changes = 150,
+      }
+    }
+  end
 end
+
 EOF
 
 " Delete buffer while keeping window layout (don't close buffer's windows).
