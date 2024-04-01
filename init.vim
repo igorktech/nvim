@@ -1,3 +1,4 @@
+" Common settings
 set mouse=a                           " enable mouse
 let mapleader = ","                   " set leader key to comma
 " let g:maplocalleader = "-"            " set file local leader key to dash
