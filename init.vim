@@ -1,4 +1,4 @@
-" Common settings
+set mouse=a                           " enable mouse
 let mapleader = ","                   " set leader key to comma
 " let g:maplocalleader = "-"            " set file local leader key to dash
 set nocompatible                     " not compatible with vi
@@ -10,7 +10,7 @@ set autoread                         " reload files when changes happen outside 
 set autowrite                        " auto write buffer on certain events
 set hidden                           " keep changes in buffer when quitting window
 set noswapfile                       " disable swap files
-set scrolloff=2                      " line padding when scrolling
+set scrolloff=7                      " line padding when scrolling
 set textwidth=0                      " when line wrap occurs
 set wrapmargin=0                     " disable auto line wrapping
 set clipboard=unnamedplus            " use system clipboard
@@ -44,15 +44,10 @@ set noshowmode                       " don't show current mode (i.e., --INSERT--
 
 set ch=0                              " make command line invisible when not typing command
 
-set mouse=a                           " enable mouse
-set encoding=utf-8
-set noswapfile
-set scrolloff=7
-
 set fileformat=unix
 filetype indent on                    " load filetype-specific indent files
 
-inoremap jk <esc>                     " Leader bind to space
+inoremap jk <esc>
 
 
 call plug#begin('~/.vim/plugged')
