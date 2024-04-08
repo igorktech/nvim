@@ -79,6 +79,9 @@ call plug#begin('~/.vim/plugged')
     Plug 'romgrk/barbar.nvim' " bar
     Plug 'nvim-lualine/lualine.nvim' " line
     Plug 'prichrd/netrw.nvim' " netrw
+    
+    " code snaps
+     Plug 'michaelrommel/nvim-silicon'
 
     " comment
     Plug 'tpope/vim-commentary'
@@ -414,7 +417,17 @@ require'netrw'.setup{
 }
 
 
+-- Code Snaps
+require'silicon'.setup(
+{
+    theme = "Visual Studio Dark+",
+    font = "Liga SFMono Nerd Font=34",
+    output = function()
+		return "~/Pictures/CodeSnaps/" .. os.date("!%Y-%m-%dT%H-%M-%S") .. "_code.png"
+	end,
+})
 
+ 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
 
