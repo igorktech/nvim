@@ -72,7 +72,14 @@ call plug#begin('~/.vim/plugged')
     
     Plug 'Pocco81/auto-save.nvim'
     Plug 'justinmk/vim-sneak'
-    
+
+    " icons
+    Plug 'lewis6991/gitsigns.nvim' " git status
+    Plug 'nvim-tree/nvim-web-devicons'
+    Plug 'romgrk/barbar.nvim' " bar
+    Plug 'nvim-lualine/lualine.nvim' " line
+    Plug 'prichrd/netrw.nvim' " netrw
+
     " comment
     Plug 'tpope/vim-commentary'
     
@@ -118,8 +125,21 @@ let g:transparent_groups = ['Normal', 'Comment', 'Constant', 'Special', 'Identif
                             \ 'Function', 'Conditional', 'Repeat', 'Operator', 'Structure',
                             \ 'LineNr', 'NonText', 'SignColumn', 'CursorLineNr', 'EndOfBuffer']
 
-" variants: mirage, dark, dark
-"let ayucolor="mirage" colorscheme ayu turn off search highlight
+
+" Set termguicolors 
+if (has('termguicolors'))
+    set termguicolors
+endif
+
+
+" Setup colorschemes
+" colorscheme gruvbox
+" colorscheme OceanicNext
+let g:xcode_green_comments = 1
+colorscheme xcode
+
+
+" bindings
 nnoremap ,<space> :nohlsearch<CR>
 
 "map explorer
@@ -233,6 +253,7 @@ require'lspconfig'.stylelint_lsp.setup{
   }
 }
 
+
 -- nvim-treesitter
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all" (the five listed parsers should always be installed)
@@ -277,6 +298,121 @@ require'nvim-treesitter.configs'.setup {
     additional_vim_regex_highlighting = true,
   },
 }
+
+
+-- gitsigns
+require('gitsigns').setup {
+    signs = {
+    add          = { text = '┃' },
+    change       = { text = '┃' },
+    delete       = { text = '•' },
+    topdelete    = { text = '‾' },
+    changedelete = { text = '~' },
+    untracked    = { text = '┆' },
+  }
+}
+
+
+-- devicons
+require'nvim-web-devicons'.setup {
+ -- your personnal icons can go here (to override)
+ -- you can specify color or cterm_color instead of specifying both of them
+ -- DevIcon will be appended to `name`
+ override = {
+  zsh = {
+    icon = "",
+    color = "#428850",
+    cterm_color = "65",
+    name = "Zsh"
+  }
+ };
+ -- globally enable different highlight colors per icon (default to true)
+ -- if set to false all icons will have the default icon's color
+ color_icons = true;
+ -- globally enable default icons (default to false)
+ -- will get overriden by `get_icons` option
+ default = true;
+ -- globally enable "strict" selection of icons - icon will be looked up in
+ -- different tables, first by filename, and if not found by extension; this
+ -- prevents cases when file doesn't have any extension but still gets some icon
+ -- because its name happened to match some extension (default to false)
+ strict = true;
+ -- same as `override` but specifically for overrides by filename
+ -- takes effect when `strict` is true
+ override_by_filename = {
+  [".gitignore"] = {
+    icon = "",
+    color = "#f1502f",
+    name = "Gitignore"
+  }
+ };
+ -- same as `override` but specifically for overrides by extension
+ -- takes effect when `strict` is true
+ override_by_extension = {
+  ["log"] = {
+    icon = "",
+    color = "#81e043",
+    name = "Log"
+  }
+ };
+ -- same as `override` but specifically for operating system
+ -- takes effect when `strict` is true
+ override_by_operating_system = {
+  ["apple"] = {
+    icon = "",
+    color = "#A2AAAD",
+    cterm_color = "248",
+    name = "Apple",
+  },
+ };
+}
+
+
+-- lualine.nvim
+require('lualine').setup {
+  options = {
+    theme = auto,
+    component_separators = '',
+    section_separators = { left = '', right = '' },
+  },
+  sections = {
+    lualine_a = { { 'mode', separator = { left = '' }, right_padding = 2 } },
+    lualine_b = { 'filename', 'branch' },
+    lualine_c = {
+      '%=', --[[ add your center compoentnts here in place of this comment ]]
+    },
+    lualine_x = {},
+    lualine_y = { 'filetype', 'progress' },
+    lualine_z = {
+      { 'location', separator = { right = '' }, left_padding = 2 },
+    },
+  },
+  inactive_sections = {
+    lualine_a = { 'filename' },
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = { 'location' },
+  },
+  tabline = {},
+  extensions = {},
+}
+
+
+-- Netrw
+require'netrw'.setup{
+  -- Put your configuration here, or leave the object empty to take the default
+  -- configuration.
+  icons = {
+    symlink = '', -- Symlink icon (directory and file)
+    directory = '', -- Directory icon
+    file = '', -- File icon
+  },
+  use_devicons = true, -- Uses nvim-web-devicons if true, otherwise use the file icon specified above
+  mappings = {}, -- Custom key mappings
+}
+
 
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
@@ -429,18 +565,7 @@ EOF
 
 
 " White colors for LSP messages in code
-set termguicolors
 hi DiagnosticError guifg=White
 hi DiagnosticWarn  guifg=White
 hi DiagnosticInfo  guifg=White
 hi DiagnosticHint  guifg=White
-
-" Setup colorschemes
-
-" colorscheme gruvbox
-" colorscheme OceanicNext
-colorscheme xcode
-if (has('termguicolors'))
-    set termguicolors
-endif
-
