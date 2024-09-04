@@ -54,7 +54,7 @@ inoremap jk <esc>
 call plug#begin('~/.vim/plugged')
     " Lang
     Plug 'ziglang/zig.vim'
-
+    Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
     " lsp
     Plug 'nvim-treesitter/nvim-treesitter'
     Plug 'neovim/nvim-lspconfig'
@@ -74,6 +74,9 @@ call plug#begin('~/.vim/plugged')
     " transparency
     Plug 'xiyaowong/nvim-transparent'
     
+    " yank highlight
+    Plug 'machakann/vim-highlightedyank'
+
     Plug 'Pocco81/auto-save.nvim'
     Plug 'justinmk/vim-sneak'
 
@@ -127,11 +130,13 @@ let g:sneak#label = 1
 
 
 " transparency
-let g:transparent_groups = ['Normal', 'Comment', 'Constant', 'Special', 'Identifier',
-                            \ 'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String',
-                            \ 'Function', 'Conditional', 'Repeat', 'Operator', 'Structure',
-                            \ 'LineNr', 'NonText', 'SignColumn', 'CursorLineNr', 'EndOfBuffer']
+" let g:transparent_groups = ['Normal', 'Comment', 'Constant', 'Special', 'Identifier',
+"                             \ 'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String',
+"                             \ 'Function', 'Conditional', 'Repeat', 'Operator', 'Structure',
+"                             \ 'LineNr', 'NonText', 'SignColumn', 'CursorLineNr', 'EndOfBuffer']
 
+" yank highlight
+let g:highlightedyank_highlight_duration = 300
 
 " Set termguicolors 
 if (has('termguicolors'))
@@ -330,7 +335,7 @@ require'nvim-treesitter.configs'.setup {
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = true,
+    additional_vim_regex_highlighting = false,
   },
 }
 
