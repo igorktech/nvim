@@ -584,9 +584,35 @@ EOF
 
 " Telescope fzf plugin
 lua << EOF
+local actions = require('telescope.actions')
+local action_state = require('telescope.actions.state')
+
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      i = {
+        ["<CR>"] = function(prompt_bufnr)
+          local selected_entry = action_state.get_selected_entry()
+          actions.close(prompt_bufnr)
+          vim.cmd('tabedit ' .. selected_entry.path)
+        end,
+        ["jk"] = actions.close  -- Bind jk to close Telescope in insert mode
+      },
+      n = {
+        ["<CR>"] = function(prompt_bufnr)
+          local selected_entry = action_state.get_selected_entry()
+          actions.close(prompt_bufnr)
+          vim.cmd('tabedit ' .. selected_entry.path)
+        end,
+        ["jk"] = actions.close  -- Bind jk to close Telescope in normal mode
+      }
+    }
+  }
+}
+
+-- Load the fzf extension after setting up Telescope
 require('telescope').load_extension('fzf')
 EOF
-
 
 " White colors for LSP messages in code
 hi DiagnosticError guifg=White
