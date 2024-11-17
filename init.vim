@@ -1,23 +1,22 @@
 " Common settings
 set mouse=a                           " enable mouse
 let mapleader = ","                   " set leader key to comma
-" let g:maplocalleader = "-"            " set file local leader key to dash
-set nocompatible                     " not compatible with vi
-set number                           " line number
-set numberwidth=1                    " line numbers gutter autowidth
-set cursorline                       " highlight current line
-set noshowmatch                      " don't jump to pair bracket
-set autoread                         " reload files when changes happen outside Vim
-set autowrite                        " auto write buffer on certain events
-set hidden                           " keep changes in buffer when quitting window
-set noswapfile                       " disable swap files
-set scrolloff=7                      " line padding when scrolling
-set textwidth=0                      " when line wrap occurs
-set wrapmargin=0                     " disable auto line wrapping
-set clipboard=unnamedplus            " use system clipboard
-let g:c_syntax_for_h = 1             " .h file use C filetype instead of C++
-set encoding=utf-8                   " utf-8 encoding
-set shellredir='>'                   " don't include stderr when reading a command
+set nocompatible                      " not compatible with vi
+set number                            " line number
+set numberwidth=1                     " line numbers gutter autowidth
+set cursorline                        " highlight current line
+set noshowmatch                       " don't jump to pair bracket
+set autoread                          " reload files when changes happen outside Vim
+set autowrite                         " auto write buffer on certain events
+set hidden                            " keep changes in buffer when quitting window
+set noswapfile                        " disable swap files
+set scrolloff=7                       " line padding when scrolling
+set textwidth=0                       " when line wrap occurs
+set wrapmargin=0                      " disable auto line wrapping
+set clipboard=unnamedplus             " use system clipboard
+let g:c_syntax_for_h = 1              " .h file use C filetype instead of C++
+set encoding=utf-8                    " utf-8 encoding
+set shellredir='>'                    " don't include stderr when reading a command
 
 " Intuitive split opening
 set splitbelow                        " split below
@@ -25,7 +24,8 @@ set splitright                        " split right
 set equalalways                       " equalize window sizes
 
 " Tab settings
-set tabstop=4                        " tab size
+set tabstop=4                         " tab size
+set showtabline=2                     " always display tabline
 set softtabstop=4
 set shiftwidth=4
 set expandtab                         " tab to space
@@ -39,9 +39,9 @@ set hlsearch                          " match highlight
 set incsearch
 
 " Status
-set laststatus=2                     " always a statusline (all windows)
-set showcmd                          " show current partial command in the bottom right
-set noshowmode                       " don't show current mode (i.e., --INSERT--)
+set laststatus=2                      " always a statusline (all windows)
+set showcmd                           " show current partial command in the bottom right
+set noshowmode                        " don't show current mode (i.e., --INSERT--)
 
 set ch=0                              " make command line invisible when not typing command
 
@@ -50,47 +50,49 @@ filetype indent on                    " load filetype-specific indent files
 
 inoremap jk <esc>
 
-
 call plug#begin('~/.vim/plugged')
     " Lang
     Plug 'ziglang/zig.vim'
     Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
-    " lsp
+    " LSP
     Plug 'nvim-treesitter/nvim-treesitter'
     Plug 'neovim/nvim-lspconfig'
     Plug 'hrsh7th/nvim-cmp'
     Plug 'hrsh7th/cmp-nvim-lsp'
     Plug 'saadparwaiz1/cmp_luasnip'
     Plug 'L3MON4D3/LuaSnip'
+
+    " Copilot
+    Plug 'github/copilot.vim'
     
-    " formatting
+    " Formatting
     Plug 'sbdchd/neoformat'
 
-    " color schemas
+    " Color schemes
     Plug 'arzg/vim-colors-xcode'
-    Plug 'morhetz/gruvbox'  " colorscheme gruvbox
-    Plug 'mhartington/oceanic-next'  " colorscheme OceanicNext
+    Plug 'morhetz/gruvbox'                 " colorscheme gruvbox
+    Plug 'mhartington/oceanic-next'        " colorscheme OceanicNext
     
-    " transparency
+    " Transparency
     Plug 'xiyaowong/nvim-transparent'
     
-    " yank highlight
+    " Yank highlight
     Plug 'machakann/vim-highlightedyank'
 
     Plug 'Pocco81/auto-save.nvim'
     Plug 'justinmk/vim-sneak'
 
-    " icons
-    Plug 'lewis6991/gitsigns.nvim' " git status
+    " Icons
+    Plug 'lewis6991/gitsigns.nvim'         " git status
     Plug 'nvim-tree/nvim-web-devicons'
-    Plug 'romgrk/barbar.nvim' " bar
-    Plug 'nvim-lualine/lualine.nvim' " line
-    Plug 'prichrd/netrw.nvim' " netrw
+    Plug 'nanozuki/tabby.nvim'             " tab bar plugin
+    Plug 'nvim-lualine/lualine.nvim'       " status line
+    Plug 'prichrd/netrw.nvim'              " netrw
     
-    " code snaps
-     Plug 'michaelrommel/nvim-silicon'
+    " Code snaps
+    Plug 'michaelrommel/nvim-silicon'
 
-    " comment
+    " Comment
     Plug 'tpope/vim-commentary'
     
     Plug 'nvim-lua/plenary.nvim'
@@ -104,19 +106,13 @@ call plug#begin('~/.vim/plugged')
     Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
     Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
     
-    " Convenient floating terminal window
-    "Plug 'voldikss/vim-floaterm'
-    
     Plug 'ray-x/lsp_signature.nvim'
 call plug#end()
 
-"set guifont BitstreamVeraSansMono_NF:h13
-
-
 " Netrw file explorer settings
-let g:netrw_banner = 0 " hide banner above files
-let g:netrw_liststyle = 3 " tree instead of plain view
-let g:netrw_browse_split = 3 " vertical split window when Enter pressed on file
+let g:netrw_banner = 0                " hide banner above files
+let g:netrw_liststyle = 3             " tree instead of plain view
+let g:netrw_browse_split = 0          " vertical split window when Enter pressed on file
 
 " Automatically format frontend files with prettier after file save
 let g:prettier#autoformat = 1
@@ -128,14 +124,7 @@ let g:prettier#quickfix_enabled = 0
 " Turn on vim-sneak
 let g:sneak#label = 1
 
-
-" transparency
-" let g:transparent_groups = ['Normal', 'Comment', 'Constant', 'Special', 'Identifier',
-"                             \ 'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String',
-"                             \ 'Function', 'Conditional', 'Repeat', 'Operator', 'Structure',
-"                             \ 'LineNr', 'NonText', 'SignColumn', 'CursorLineNr', 'EndOfBuffer']
-
-" yank highlight
+" Yank highlight
 let g:highlightedyank_highlight_duration = 300
 
 " Set termguicolors 
@@ -143,25 +132,26 @@ if (has('termguicolors'))
     set termguicolors
 endif
 
-
 " Setup colorschemes
-" colorscheme gruvbox
-" colorscheme OceanicNext
 let g:xcode_green_comments = 1
 colorscheme xcode
-
-
-" bindings
+" let g:xcodelight_green_comments = 1
+" colorscheme xcodelight
+"
+" Bindings
 nnoremap ,<space> :nohlsearch<CR>
 
-"map explorer
-nnoremap <Leader>e :Vexplore<CR>
+" Map to open netrw in a new tab
+nnoremap <leader>e :tabnew \| :Explore<CR>
+
+" Auto close netrw when opening a file
+autocmd FileType netrw setlocal bufhidden=wipe
 
 lua << EOF
--- Set completeopt to have a better completion experience
+-- Set completeopt for better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
--- luasnip setup
+-- Luasnip setup
 local luasnip = require 'luasnip'
 local async = require "plenary.async"
 
@@ -210,16 +200,15 @@ cmp.setup {
   },
 }
 
-
--- Setup language servers.
+-- Setup language servers
 local nvim_lsp = require('lspconfig')
 
--- Common on_attach function to set up keybindings.
+-- Common on_attach function to set up keybindings
 local function on_attach(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  -- Mappings.
+  -- Mappings
   local bufopts = { noremap=true, silent=true, buffer=bufnr }
   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
@@ -248,7 +237,7 @@ local function on_attach(client, bufnr)
   end
 
   require "lsp_signature".on_attach({
-      bind = true, -- This is mandatory, otherwise border config won't get registered.
+      bind = true,
       floating_window = true,
       floating_window_above_cur_line = true,
       floating_window_off_x = 20,
@@ -256,7 +245,6 @@ local function on_attach(client, bufnr)
       hint_prefix = '👻 '
     }, bufnr)
 end
-
 
 -- Stylelint format after save
 require'lspconfig'.stylelint_lsp.setup{
@@ -268,11 +256,8 @@ require'lspconfig'.stylelint_lsp.setup{
   }
 }
  
-
 -- Language server setups
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
-local servers = { 'pyright', 'clangd', 'rust_analyzer', 'solargraph', 'gopls', 'zls' }
+local servers = { 'pyright', 'clangd', 'rust_analyzer', 'solargraph', 'gopls', 'zls', 'bashls' }
 for _, lsp in ipairs(servers) do
   if lsp == "clangd" then
     nvim_lsp[lsp].setup {
@@ -293,36 +278,17 @@ for _, lsp in ipairs(servers) do
   end
 end
 
-
 -- nvim-treesitter
 require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all" (the five listed parsers should always be installed)
-
   ensure_installed = {"c","cpp","css","python","go","html","javascript","json",
-  "dockerfile","latex","lua","markdown","matlab","ruby","rust","typescript","vim","vimdoc", "zig"},
+  "dockerfile","lua","markdown","matlab","ruby","rust","typescript","vim","vimdoc", "zig", "bash"},
 
-  -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
-
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
   auto_install = true,
-
-  -- List of parsers to ignore installing (for "all")
   ignore_install = { "" },
-
-  ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-  -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
 
   highlight = {
     enable = true,
-
-    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-    -- the name of the parser)
-    -- list of language that will be disabled
-    -- disable = { "" },
-    -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
     disable = function(lang, buf)
         local max_filesize = 100 * 1024 -- 100 KB
         local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
@@ -330,15 +296,9 @@ require'nvim-treesitter.configs'.setup {
             return true
         end
     end,
-
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
   },
 }
-
 
 -- gitsigns
 require('gitsigns').setup {
@@ -352,12 +312,8 @@ require('gitsigns').setup {
   }
 }
 
-
 -- devicons
 require'nvim-web-devicons'.setup {
- -- your personnal icons can go here (to override)
- -- you can specify color or cterm_color instead of specifying both of them
- -- DevIcon will be appended to `name`
  override = {
   zsh = {
     icon = "",
@@ -366,19 +322,9 @@ require'nvim-web-devicons'.setup {
     name = "Zsh"
   }
  };
- -- globally enable different highlight colors per icon (default to true)
- -- if set to false all icons will have the default icon's color
  color_icons = true;
- -- globally enable default icons (default to false)
- -- will get overriden by `get_icons` option
  default = true;
- -- globally enable "strict" selection of icons - icon will be looked up in
- -- different tables, first by filename, and if not found by extension; this
- -- prevents cases when file doesn't have any extension but still gets some icon
- -- because its name happened to match some extension (default to false)
  strict = true;
- -- same as `override` but specifically for overrides by filename
- -- takes effect when `strict` is true
  override_by_filename = {
   [".gitignore"] = {
     icon = "",
@@ -386,8 +332,6 @@ require'nvim-web-devicons'.setup {
     name = "Gitignore"
   }
  };
- -- same as `override` but specifically for overrides by extension
- -- takes effect when `strict` is true
  override_by_extension = {
   ["log"] = {
     icon = "",
@@ -395,8 +339,6 @@ require'nvim-web-devicons'.setup {
     name = "Log"
   }
  };
- -- same as `override` but specifically for operating system
- -- takes effect when `strict` is true
  override_by_operating_system = {
   ["apple"] = {
     icon = "",
@@ -406,7 +348,6 @@ require'nvim-web-devicons'.setup {
   },
  };
 }
-
 
 -- lualine.nvim
 require('lualine').setup {
@@ -419,7 +360,7 @@ require('lualine').setup {
     lualine_a = { { 'mode', separator = { left = '' }, right_padding = 2 } },
     lualine_b = { 'filename', 'branch' },
     lualine_c = {
-      '%=', --[[ add your center compoentnts here in place of this comment ]]
+      '%=', 
     },
     lualine_x = {},
     lualine_y = { 'filetype', 'progress' },
@@ -439,29 +380,30 @@ require('lualine').setup {
   extensions = {},
 }
 
-
 -- Netrw
 require'netrw'.setup{
-  -- Put your configuration here, or leave the object empty to take the default
-  -- configuration.
   icons = {
-    symlink = '', -- Symlink icon (directory and file)
-    directory = '', -- Directory icon
-    file = '', -- File icon
+    symlink = '', 
+    directory = '', 
+    file = '', 
   },
-  use_devicons = true, -- Uses nvim-web-devicons if true, otherwise use the file icon specified above
-  mappings = {}, -- Custom key mappings
+  use_devicons = true,
+  mappings = {},
 }
 
-
 -- Code Snaps
-require'silicon'.setup(
+require'nvim-silicon'.setup(
 {
     theme = "Visual Studio Dark+",
     font = "Liga SFMono Nerd Font=34",
     output = function()
-		return "~/Pictures/CodeSnaps/" .. os.date("!%Y-%m-%dT%H-%M-%S") .. "_code.png"
-	end,
+        return "~/Pictures/CodeSnaps/" .. os.date("!%Y-%m-%dT%H-%M-%S") .. "_code.png"
+    end,
+})
+
+-- tabby.nvim
+require('tabby').setup({
+  tabline = require('tabby.presets').active_wins_at_tail,
 })
 
 EOF
@@ -555,13 +497,12 @@ autocmd FileType sh imap <buffer> <C-h> <esc>:w<CR>:exec '!bash' shellescape(@%,
 
 " For all files
 autocmd BufEnter * set colorcolumn=79
-" autocmd FileType python set colorcolumn=79
 
 set relativenumber
 set rnu
 
+" Transparency
 let g:transparent_enabled = v:true
-
 
 tnoremap <Esc> <C-\><C-n>
 
@@ -574,19 +515,14 @@ nnoremap H gT
 nnoremap L gt
 
 " Autosave plugin
-
 lua << EOF
-require("auto-save").setup(
-    {
-    }
-)
+require("auto-save").setup({})
 EOF
 
 " Telescope fzf plugin
 lua << EOF
 require('telescope').load_extension('fzf')
 EOF
-
 
 " White colors for LSP messages in code
 hi DiagnosticError guifg=White
