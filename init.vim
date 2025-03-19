@@ -300,6 +300,10 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 
+-- foldexpr for treesitter
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+
 -- gitsigns
 require('gitsigns').setup {
     signs = {
