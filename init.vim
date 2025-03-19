@@ -301,8 +301,15 @@ require'nvim-treesitter.configs'.setup {
 }
 
 -- foldexpr for treesitter
-vim.wo.foldmethod = 'expr'
-vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+
+vim.api.nvim_create_autocmd({ "BufReadPost", "FileReadPost" }, {
+  pattern = "*",
+  callback = function()
+    vim.cmd("normal! zR")
+  end,
+})
 
 -- gitsigns
 require('gitsigns').setup {
