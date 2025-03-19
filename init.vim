@@ -75,6 +75,9 @@ call plug#begin('~/.vim/plugged')
     
     " Transparency
     Plug 'xiyaowong/nvim-transparent'
+
+    " Startup screen
+    Plug 'goolord/alpha-nvim'
     
     " Yank highlight
     Plug 'machakann/vim-highlightedyank'
@@ -416,6 +419,9 @@ require'nvim-silicon'.setup(
 require('tabby').setup({
   tabline = require('tabby.presets').active_wins_at_tail,
 })
+
+-- alpha-nvim
+require'alpha'.setup(require'alpha.themes.startify'.opts)
 
 EOF
 
