@@ -135,8 +135,8 @@ endif
 " Setup colorschemes
 let g:xcode_green_comments = 1
 colorscheme xcode
-" let g:xcodelight_green_comments = 1
-" colorscheme xcodelight
+let g:xcodelight_green_comments = 1
+colorscheme xcodelight
 "
 " Bindings
 nnoremap ,<space> :nohlsearch<CR>
@@ -148,6 +148,8 @@ nnoremap <leader>e :tabnew \| :Explore<CR>
 autocmd FileType netrw setlocal bufhidden=wipe
 
 lua << EOF
+vim.o.guifont = "Liga SFMono Nerd Font:h14" -- text below applies for VimScript
+
 -- Set completeopt for better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
@@ -502,7 +504,7 @@ set relativenumber
 set rnu
 
 " Transparency
-let g:transparent_enabled = v:true
+let g:transparent_enabled = v:false
 
 tnoremap <Esc> <C-\><C-n>
 
