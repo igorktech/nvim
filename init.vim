@@ -64,20 +64,41 @@ call plug#begin('~/.vim/plugged')
 
     " Copilot
     Plug 'github/copilot.vim'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'CopilotC-Nvim/CopilotChat.nvim'
     
     " Formatting
     Plug 'sbdchd/neoformat'
 
-    " Color schemes
-    Plug 'arzg/vim-colors-xcode'
+    " Colorscheme manager
+    Plug 'zaldih/themery.nvim'             " themery theme manager
+    " Colorschemes
+    Plug 'arzg/vim-colors-xcode'           " colorscheme xcode
     Plug 'morhetz/gruvbox'                 " colorscheme gruvbox
     Plug 'mhartington/oceanic-next'        " colorscheme OceanicNext
+    Plug 'sainttttt/flesh-and-blood'       " colorscheme flesh-and-blood
+    Plug 'ficcdaf/ashen.nvim'              " colorscheme ashen
+    Plug 'slugbyte/lackluster.nvim'        " colorscheme lackluster
+    Plug 'IllegalLeft/honeywell.vim'       " colorscheme honeywell
+    Plug 'water-sucks/darkrose.nvim'       " colorscheme darkrose
+    Plug 'paulfrische/reddish.nvim'        " colorscheme reddish
+    Plug 'luisiacc/the-matrix.nvim'        " colorscheme thematrix
+    Plug 'Yazeed1s/oh-lucy.nvim'           " colorscheme oh-lucy
+    Plug 'rebelot/kanagawa.nvim'           " colorscheme kanagawa
+    Plug 'aliqyan-21/darkvoid.nvim'        " colorscheme darkvoid
+    Plug 'sainnhe/sonokai'                 " colorscheme sonokai
+    Plug 'Yazeed1s/minimal.nvim'           " colorscheme minimal
+    Plug 'Mofiqul/adwaita.nvim'            " colorscheme adwaita
+    Plug 'rockerBOO/boo-colorscheme-nvim'  " colorscheme boo
+    Plug 'zenbones-theme/zenbones.nvim'    " colorscheme zenbones
+    Plug 'folke/tokyonight.nvim'           " colorscheme tokyonight
     
     " Transparency
     Plug 'xiyaowong/nvim-transparent'
 
     " Startup screen
-    Plug 'goolord/alpha-nvim'
+    Plug 'igorktech/rain.nvim'
+    Plug 'folke/snacks.nvim'
     
     " Yank highlight
     Plug 'machakann/vim-highlightedyank'
@@ -97,8 +118,9 @@ call plug#begin('~/.vim/plugged')
 
     " Comment
     Plug 'tpope/vim-commentary'
-    
-    Plug 'nvim-lua/plenary.nvim'
+
+    " Hex color preview
+    Plug 'norcalli/nvim-colorizer.lua'
     
     Plug 'prettier/vim-prettier', {
       \ 'do': 'yarn install --frozen-lockfile --production',
@@ -106,11 +128,15 @@ call plug#begin('~/.vim/plugged')
     
     Plug 'bmatcuk/stylelint-lsp'
     
+    " Telescope
     Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
     Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
     
     Plug 'ray-x/lsp_signature.nvim'
 call plug#end()
+
+" Neovide settings
+let g:neovide_floating_shadow = v:false
 
 " Netrw file explorer settings
 let g:netrw_banner = 0                " hide banner above files
@@ -135,12 +161,6 @@ if (has('termguicolors'))
     set termguicolors
 endif
 
-" Setup colorschemes
-let g:xcode_green_comments = 1
-colorscheme xcode
-let g:xcodelight_green_comments = 1
-colorscheme xcodelight
-"
 " Bindings
 nnoremap ,<space> :nohlsearch<CR>
 
@@ -262,7 +282,7 @@ require'lspconfig'.stylelint_lsp.setup{
 }
  
 -- Language server setups
-local servers = { 'pyright', 'clangd', 'rust_analyzer', 'solargraph', 'gopls', 'zls', 'bashls' }
+local servers = { 'pyright', 'clangd', 'lua_ls', 'rust_analyzer', 'solargraph', 'gopls', 'zls', 'bashls' }
 for _, lsp in ipairs(servers) do
   if lsp == "clangd" then
     nvim_lsp[lsp].setup {
@@ -417,14 +437,285 @@ require'nvim-silicon'.setup(
     end,
 })
 
+-- Colorizer
+require("colorizer").setup()
+
 -- tabby.nvim
 require('tabby').setup({
   tabline = require('tabby.presets').active_wins_at_tail,
 })
 
--- alpha-nvim
-require'alpha'.setup(require'alpha.themes.startify'.opts)
+-- rain.nvim
+require("rain").setup({
+  theme = {
+    symbols = { "❦", "🩸", "❢", "●", "·"},
+    colors = { "#8B0000", "#B22222", "#DC143C", "#B40707", "#FFDEAD" },
+  },
+  max = 75,                       
+  interval = 100,                 
+  screensaver = 1000 * 60 * 5,      
+  filetypes = { "dashboard", "alpha", "ministarter" },
+  winblend = 100,                 
+  tail = { enable = true, length = 5, delta = 5, dynamic = true }, -- enable/disable tail
+  wind = { enable = true, speed = 4, direction = "both" }, -- enable/disable wind effect
+ 
+})
 
+-- snacks.nvim
+require("snacks").setup({
+  dashboard = {
+    pane_gap = 15,
+    preset = {
+      keys = {
+        { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+        { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+        { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+        { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+        { icon = " ", key = "c", desc = "Config", action = ":e $MYVIMRC" },
+        { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+        { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+      },
+      header = [[
+  ███▄    █ ▓█████  ▒█████   ██▒   █▓ ██▓ ███▄ ▄███▓
+  ██ ▀█   █ ▓█   ▀ ▒██▒  ██▒▓██░   █▒▓██▒▓██▒▀█▀ ██▒
+ ▓██  ▀█ ██▒▒███   ▒██░  ██▒ ▓██  █▒░▒██▒▓██    ▓██░
+▓██▒  ▐▌██▒▒▓█  ▄ ▒██   ██░  ▒██ █░░░██░▒██    ▒██
+ ▒██░   ▓██░░▒████▒░ ████▓▒░   ▒▀█░  ░██░▒██▒   ░██▒
+ ░ ▒░   ▒ ▒ ░░ ▒░ ░░ ▒░▒░▒░    ░ ▐░  ░▓  ░ ▒░   ░  ░
+ ░ ░░   ░ ▒░ ░ ░  ░  ░ ▒ ▒░    ░ ░░   ▒ ░░  ░      ░
+    ░   ░ ░    ░   ░ ░ ░ ▒       ░░   ▒ ░░      ░
+          ░    ░  ░    ░ ░        ░   ░         ░
+                                 ░
+      ]],
+    },
+    formats = {
+      key = function(item)
+        return {
+          { "[", hl = "special" },
+          { item.key, hl = "key" },
+          { "]", hl = "special" },
+        }
+      end,
+    },
+    sections = {
+      {
+        {
+          pane = 1,
+          section = "terminal",
+          cmd = "img2art ~/.config/nvim/dashboard_img/hq.png --threshold 50 --scale .26 --quant 16 --with-color",
+          height = 21,
+          width = 75,
+          padding = 1,
+        },
+        {
+          pane = 2,
+          {
+            section = "keys",
+            gap = 1,
+            padding = 1,
+          },
+          {
+            icon = " ",
+            title = "Recent Files",
+          },
+          {
+            section = "recent_files",
+            opts = { limit = 3 },
+            indent = 2,
+            padding = 1,
+          },
+          {
+            icon = " ",
+            title = "Projects",
+          },
+          {
+            section = "projects",
+            opts = { limit = 3 },
+            indent = 2,
+            padding = 1,
+          },
+        },
+        enabled = function() return vim.o.columns > 135 end,
+      },
+      {
+        pane = 1,
+        { section = "header" },
+        {
+          section = "keys",
+          gap = 1,
+          padding = 1,
+        },
+        enabled = function() return vim.o.columns <= 135 end,
+      },
+    },
+  },
+})
+
+vim.api.nvim_set_hl(0, "SnacksDashboardKey", { fg = "#5ceef6" })
+vim.api.nvim_set_hl(0, "SnacksDashboardTitle", { fg = "#c49aee" })
+vim.api.nvim_set_hl(0, "SnacksDashboardHeader", { fg = "#c49aee" })
+
+-- Themery setup
+require("themery").setup({
+  themes = {
+    {
+      name = "Xcode Light",
+      colorscheme = "xcodelight",
+      before = [[
+        vim.g.xcodelight_green_comments = 1
+      ]],
+    },
+    {
+      name = "Xcode Dark",
+      colorscheme = "xcodedark",
+      before = [[
+        vim.g.xcodedark_green_comments = 1
+      ]],
+    },
+    {
+      name = "Gruvbox Dark",
+      colorscheme = "gruvbox",
+      before = [[
+        vim.opt.background = "dark"
+      ]],
+    },
+    {
+      name = "Gruvbox Light",
+      colorscheme = "gruvbox",
+      before = [[
+        vim.opt.background = "light"
+      ]],
+    },
+    {
+      name = "Flesh and Blood",
+      colorscheme = "flesh-and-blood",
+      before = [[
+        vim.opt.background = "dark"
+      ]],
+      after = [[
+        -- Override the Normal highlight group to set your desired background.
+        vim.cmd("highlight Normal guibg=#1a1a1a")
+      ]]
+    },
+    {
+      name = "Ashen",
+      colorscheme = "ashen",
+    },
+    {
+      name = "Lackluster",
+      colorscheme = "lackluster-dark",
+      before = [[
+        vim.opt.background = "dark"
+      ]],
+    },
+    {
+      name = "Honeywell",
+      colorscheme = "honeywell",
+      before = [[
+        vim.opt.background = "dark"
+      ]],
+    },
+    {
+      name = "Darkrose",
+      colorscheme = "darkrose",
+      before = [[
+        vim.opt.background = "dark"
+      ]],
+    },
+    {
+      name = "Reddish",
+      colorscheme = "reddish",
+      before = [[
+        vim.opt.background = "dark"
+      ]],
+    },
+    {
+      name = "The Matrix",
+      colorscheme = "thematrix",
+      before = [[
+        vim.opt.background = "dark"
+      ]],
+    },
+    {
+      name = "Oh Lucy",
+      colorscheme = "oh-lucy-evening",
+      before = [[
+        vim.opt.background = "dark"
+      ]],
+    },
+    {
+      name = "Kanagawa",
+      colorscheme = "kanagawa-dragon",
+    },
+    {
+      name = "Darkvoid",
+      colorscheme = "darkvoid",
+    },
+    {
+      name = "Oceanic Next",
+      colorscheme = "OceanicNext",
+    },
+    {
+      name = "Sonokai",
+      colorscheme = "sonokai",
+      before = [[
+        vim.opt.background = "dark"
+        vim.g.sonokai_style = "shusia"
+      ]],
+    },
+    {
+      name = "Minimal",
+      colorscheme = "minimal",
+    },
+    {
+      name = "Minimal-base16",
+      colorscheme = "minimal-base16",
+    },
+    {
+      name = "Adwaita Dark",
+      colorscheme = "adwaita",
+      before = [[
+        vim.opt.background = "dark"
+        vim.g.adwaita_darker = true
+      ]],
+    },
+    {
+      name = "Adwaita Light",
+      colorscheme = "adwaita",
+      before = [[
+        vim.opt.background = "light"
+        vim.g.adwaita_darker = false
+      ]],
+    },
+    {
+      name = "Boo",
+      colorscheme = "boo",
+      before = [[
+        vim.opt.background = "dark"
+        vim.g.boo_colorscheme_italic = true
+      ]],
+    },
+    {
+      name = "Zenbones",
+      colorscheme = "neobones",
+      before = [[
+        vim.opt.background = "dark"
+      ]],
+    },
+    {
+      name = "Tokyonight",
+      colorscheme = "tokyonight",
+      before = [[
+        vim.opt.background = "dark"
+      ]],
+    },
+  },
+})
+
+--Set CopilotC-Nvim
+require("CopilotChat").setup {
+  -- See Configuration section for options
+}
 EOF
 
 " Delete buffer while keeping window layout (don't close buffer's windows).
@@ -523,7 +814,9 @@ set rnu
 " Transparency
 let g:transparent_enabled = v:false
 
+" Terminal settings
 tnoremap <Esc> <C-\><C-n>
+nnoremap <leader>t :tabnew \| :terminal<CR>
 
 " Telescope bindings
 nnoremap ,f <cmd>Telescope find_files<cr>
