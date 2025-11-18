@@ -171,7 +171,7 @@ nnoremap <leader>e :tabnew \| :Explore<CR>
 autocmd FileType netrw setlocal bufhidden=wipe
 
 lua << EOF
-vim.o.guifont = "Liga SFMono Nerd Font:h14" -- text below applies for VimScript
+vim.o.guifont = "Liga SFMono Nerd Font:h13" -- text below applies for VimScript
 
 -- Set completeopt for better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -559,17 +559,51 @@ vim.api.nvim_set_hl(0, "SnacksDashboardHeader", { fg = "#c49aee" })
 require("themery").setup({
   themes = {
     {
-      name = "Xcode Light",
+      name = "Xcode Light Green Comments",
       colorscheme = "xcodelight",
       before = [[
         vim.g.xcodelight_green_comments = 1
       ]],
     },
     {
-      name = "Xcode Dark",
+      name = "Xcode Dark Green Comments",
       colorscheme = "xcodedark",
       before = [[
         vim.g.xcodedark_green_comments = 1
+      ]],
+    },
+    {
+      name = "Xcode Light",
+      colorscheme = "xcodelight",
+      before = [[
+        vim.g.xcodelight_green_comments = 0
+      ]],
+    },
+    {
+      name = "Xcode Dark",
+      colorscheme = "xcodedark",
+      before = [[
+        vim.g.xcodedark_green_comments = 0
+      ]],
+
+    },
+    {
+      name = "Xcode WWDC",
+      colorscheme = "xcodewwdc",
+    },
+    {
+      name = "Xcode Dark HC",
+      colorscheme = "xcodedarkhc",
+    },
+    {
+      name = "Xcode Light HC",
+      colorscheme = "xcodelighthc",
+    },
+    {
+      name = "Cursor Dark Core",
+      colorscheme = "cursor-dark-core",
+      before = [[
+        vim.opt.background = "dark"
       ]],
     },
     {
