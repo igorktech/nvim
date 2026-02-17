@@ -164,11 +164,29 @@ endif
 " Bindings
 nnoremap ,<space> :nohlsearch<CR>
 
+
 " Map to open netrw in a new tab
-nnoremap <leader>e :tabnew \| :Explore<CR>
+" nnoremap <leader>e :tabnew \| :Explore<CR>
+nnoremap <leader>e :Lexplore<CR>
+
+" jump to the netrw tree (left window)
+nnoremap <leader>h <C-w>h
+" jump back to the file (right window)
+nnoremap <leader>l <C-w>l
 
 " Auto close netrw when opening a file
-autocmd FileType netrw setlocal bufhidden=wipe
+" autocmd FileType netrw setlocal bufhidden=wipe
+" Disables line numbers in the tree and keeps signcolumn visible for icons/signs.
+augroup NetrwDrawer
+  autocmd!
+  autocmd FileType netrw setlocal nonumber norelativenumber signcolumn=yes nowrap
+augroup END
+
+" Netrw (drawer style)
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3        " tree view
+let g:netrw_winsize = 25         " sidebar width (% of screen)
+let g:netrw_browse_split = 4     " open files in the *previous* window (keep netrw open)
 
 lua << EOF
 vim.o.guifont = "Liga SFMono Nerd Font:h13" -- text below applies for VimScript
