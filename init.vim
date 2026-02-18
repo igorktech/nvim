@@ -139,9 +139,10 @@ call plug#end()
 let g:neovide_floating_shadow = v:false
 
 " Netrw file explorer settings
-let g:netrw_banner = 0                " hide banner above files
-let g:netrw_liststyle = 3             " tree instead of plain view
-let g:netrw_browse_split = 0          " vertical split window when Enter pressed on file
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3        " tree view
+let g:netrw_winsize = 25         " sidebar width (% of screen)
+let g:netrw_browse_split = 3     " open files in the *previous* window (keep netrw open)
 
 " Automatically format frontend files with prettier after file save
 let g:prettier#autoformat = 1
@@ -181,12 +182,6 @@ augroup NetrwDrawer
   autocmd!
   autocmd FileType netrw setlocal nonumber norelativenumber signcolumn=yes nowrap
 augroup END
-
-" Netrw (drawer style)
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3        " tree view
-let g:netrw_winsize = 25         " sidebar width (% of screen)
-let g:netrw_browse_split = 4     " open files in the *previous* window (keep netrw open)
 
 lua << EOF
 vim.o.guifont = "Liga SFMono Nerd Font:h13" -- text below applies for VimScript
