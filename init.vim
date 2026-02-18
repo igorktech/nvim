@@ -406,7 +406,7 @@ require'nvim-web-devicons'.setup {
 -- lualine.nvim
 require('lualine').setup {
   options = {
-    theme = auto,
+    theme = 'auto',
     component_separators = '',
     section_separators = { left = '', right = '' },
   },
