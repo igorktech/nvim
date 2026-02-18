@@ -54,9 +54,9 @@ call plug#begin('~/.vim/plugged')
     " Lang
     Plug 'ziglang/zig.vim'
     Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
-    " LSP
+    " LSP (using vim.lsp.config API with nvim-lspconfig server definitions)
     Plug 'nvim-treesitter/nvim-treesitter'
-    Plug 'neovim/nvim-lspconfig'
+    Plug 'neovim/nvim-lspconfig'  " Provides server configs for vim.lsp.config
     Plug 'hrsh7th/nvim-cmp'
     Plug 'hrsh7th/cmp-nvim-lsp'
     Plug 'saadparwaiz1/cmp_luasnip'
@@ -129,7 +129,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'bmatcuk/stylelint-lsp'
     
     " Telescope
-    Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.4' }
+    Plug 'nvim-telescope/telescope.nvim'
     Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
     
     Plug 'ray-x/lsp_signature.nvim'
@@ -238,13 +238,13 @@ cmp.setup {
   },
 }
 
--- Setup language servers
-local nvim_lsp = require('lspconfig')
+-- Setup language servers using modern vim.lsp.config API
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Common on_attach function to set up keybindings
 local function on_attach(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
   -- Mappings
   local bufopts = { noremap=true, silent=true, buffer=bufnr }
@@ -284,68 +284,129 @@ local function on_attach(client, bufnr)
     }, bufnr)
 end
 
--- Stylelint format after save
-require'lspconfig'.stylelint_lsp.setup{
+-- Language server configurations using vim.lsp.config
+vim.lsp.config('*', {
+  capabilities = capabilities,
+  on_attach = on_attach,
+})
+
+-- Stylelint LSP
+vim.lsp.config.stylelint_lsp = {
+  cmd = { 'stylelint-lsp', '--stdio' },
+  filetypes = { 'css', 'scss', 'less', 'sass' },
+  root_markers = { '.stylelintrc', '.stylelintrc.json', 'stylelint.config.js' },
   settings = {
     stylelintplus = {
       --autoFixOnSave = true,
       --autoFixOnFormat = true,
     }
-  }
-}
- 
--- Language server setups
-local servers = { 'pyright', 'clangd', 'lua_ls', 'rust_analyzer', 'solargraph', 'gopls', 'zls', 'bashls' }
-for _, lsp in ipairs(servers) do
-  if lsp == "clangd" then
-    nvim_lsp[lsp].setup {
-      on_attach = on_attach,
-      flags = {
-        debounce_text_changes = 150,
-      },
-      cmd = { "clangd", "--background-index", "--clang-tidy", "--fallback-style=LLVM" },
-      filetypes = { "c", "cpp" },
-    }
-  else
-    nvim_lsp[lsp].setup {
-      on_attach = on_attach,
-      flags = {
-        debounce_text_changes = 150,
-      }
-    }
-  end
-end
-
--- nvim-treesitter
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = {"c","cpp","css","python","go","html","javascript","json",
-  "dockerfile","lua","markdown","matlab","ruby","rust","typescript","vim","vimdoc", "zig", "bash"},
-
-  sync_install = false,
-  auto_install = true,
-  ignore_install = { "" },
-
-  highlight = {
-    enable = true,
-    disable = function(lang, buf)
-        local max_filesize = 100 * 1024 -- 100 KB
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if ok and stats and stats.size > max_filesize then
-            return true
-        end
-    end,
-    additional_vim_regex_highlighting = false,
   },
 }
 
--- foldexpr for treesitter
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- Pyright
+vim.lsp.config.pyright = {
+  cmd = { 'pyright-langserver', '--stdio' },
+  filetypes = { 'python' },
+  root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile' },
+}
 
+-- Clangd
+vim.lsp.config.clangd = {
+  cmd = { 'clangd', '--background-index', '--clang-tidy', '--fallback-style=LLVM' },
+  filetypes = { 'c', 'cpp' },
+  root_markers = { 'compile_commands.json', 'compile_flags.txt', '.git' },
+}
+
+-- Lua LS
+vim.lsp.config.lua_ls = {
+  cmd = { 'lua-language-server' },
+  filetypes = { 'lua' },
+  root_markers = { '.luarc.json', '.luarc.jsonc', '.luacheckrc', '.stylua.toml', 'stylua.toml', 'selene.toml', 'selene.yml', '.git' },
+}
+
+-- Rust Analyzer
+vim.lsp.config.rust_analyzer = {
+  cmd = { 'rust-analyzer' },
+  filetypes = { 'rust' },
+  root_markers = { 'Cargo.toml', 'rust-project.json' },
+}
+
+-- Solargraph (Ruby)
+vim.lsp.config.solargraph = {
+  cmd = { 'solargraph', 'stdio' },
+  filetypes = { 'ruby' },
+  root_markers = { 'Gemfile', '.git' },
+}
+
+-- Gopls (Go)
+vim.lsp.config.gopls = {
+  cmd = { 'gopls' },
+  filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+  root_markers = { 'go.work', 'go.mod', '.git' },
+}
+
+-- ZLS (Zig)
+vim.lsp.config.zls = {
+  cmd = { 'zls' },
+  filetypes = { 'zig', 'zir' },
+  root_markers = { 'zls.json', '.git' },
+}
+
+-- Bash LS
+vim.lsp.config.bashls = {
+  cmd = { 'bash-language-server', 'start' },
+  filetypes = { 'sh', 'bash' },
+  root_markers = { '.git' },
+}
+
+-- Enable LSP servers (pass each server individually, not as a table)
+vim.lsp.enable('pyright')
+vim.lsp.enable('clangd')
+vim.lsp.enable('lua_ls')
+vim.lsp.enable('rust_analyzer')
+vim.lsp.enable('solargraph')
+vim.lsp.enable('gopls')
+vim.lsp.enable('zls')
+vim.lsp.enable('bashls')
+vim.lsp.enable('stylelint_lsp')
+
+-- nvim-treesitter (new API)
+require'nvim-treesitter'.setup {
+  install_dir = vim.fn.stdpath('data') .. '/site'
+}
+
+-- Install parsers
+local parsers = {"c","cpp","css","python","go","html","javascript","json",
+  "dockerfile","lua","markdown","matlab","ruby","rust","typescript","vim","vimdoc", "zig", "bash"}
+require'nvim-treesitter'.install(parsers)
+
+-- Enable treesitter highlighting only when a parser is available
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  callback = function(args)
+    local ft = vim.bo[args.buf].filetype
+    -- Skip special filetypes that don't have parsers
+    if ft == "" or ft:match("^snacks") or ft == "netrw" or ft == "dashboard" then
+      return
+    end
+    local lang = vim.treesitter.language.get_lang(ft) or ft
+    -- Try to start treesitter, silently fail if no parser
+    local ok = pcall(vim.treesitter.start, args.buf, lang)
+    if ok then
+      vim.wo[0][0].foldmethod = "expr"
+      vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    end
+  end,
+})
+
+-- Unfold all when opening files (with window check)
 vim.api.nvim_create_autocmd({ "BufReadPost", "FileReadPost" }, {
   pattern = "*",
-  callback = function()
-    vim.cmd("normal! zR")
+  callback = function(args)
+    local wins = vim.fn.win_findbuf(args.buf)
+    if #wins > 0 then
+      vim.cmd("normal! zR")
+    end
   end,
 })
 
@@ -401,7 +462,7 @@ require'nvim-web-devicons'.setup {
 -- lualine.nvim
 require('lualine').setup {
   options = {
-    theme = auto,
+    theme = 'auto',
     component_separators = '',
     section_separators = { left = '', right = '' },
   },
@@ -474,7 +535,8 @@ require("rain").setup({
  
 })
 
--- snacks.nvim
+-- snacks.nvim (wrap in VimEnter to avoid double-setup with plugin/snacks.lua)
+vim.api.nvim_create_autocmd("VimEnter", { once = true, callback = function()
 require("snacks").setup({
   dashboard = {
     pane_gap = 15,
@@ -563,6 +625,7 @@ require("snacks").setup({
     },
   },
 })
+end })
 
 vim.api.nvim_set_hl(0, "SnacksDashboardKey", { fg = "#5ceef6" })
 vim.api.nvim_set_hl(0, "SnacksDashboardTitle", { fg = "#c49aee" })
